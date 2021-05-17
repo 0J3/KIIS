@@ -1,0 +1,17 @@
+{
+  "name": "KIISTest",
+  "tree": {
+    "$ignoreUnknownInstances": true,
+    "$path": "src/Test",
+    "$className": "DataModel",
+    "ReplicatedFirst": {
+      "$className": "ReplicatedFirst",
+      "KIIS": {
+        "$path": "src/KIIS"
+      },
+      "0ES": {
+        "$path": "src/0ES"
+      }
+    }
+  }
+}

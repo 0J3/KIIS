@@ -2,15 +2,21 @@
   "name": "KIIS",
   "tree": {
     "$className": "DataModel",
+    "$ignoreUnknownInstances": true,
     "ReplicatedFirst": {
       "$className": "ReplicatedFirst",
-      "$ignoreUnknownInstances": false,
-      "$path": "src/ReplicatedFirst"
+      "KIIS": {
+        "$path": "src/KIIS"
+      },
+      "0ES": {
+        "$path": "src/0ES"
+      }
     },
     "ServerStorage": {
       "$className": "ServerStorage",
-      "$ignoreUnknownInstances": false,
-      "$path": "src/ServerStorage"
+      "Benchmarks": {
+        "$path": "src/Benchmarks"
+      }
     }
   }
 }

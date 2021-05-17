@@ -14,9 +14,9 @@ https://devforum.roblox.com/t/benchmarker-plugin-compare-function-speeds-with-gr
 
 --------------------------------------------------------------------]]
 
-local eventTest = require(6822278371)
-local eventTestUntyped = eventTest.getUntypedEdition()
-local eventTestUnsafe = eventTest.getUnsafeEdition()
+local eventTest = require(6822278371);
+
+local KIIS = require(6822873135);
 
 return {
 
@@ -29,8 +29,41 @@ return {
 	end;
 
 	Functions = {
---------------------------------------------------------------------------
-		["Custom Events"] = function(Profiler, a)
+		["Vanilla Events"] = function(Profiler, a) -- You can change "Sample A" to a descriptive name for your function
+
+			-- The first argument passed is always our Profiler tool, so you can put
+			-- Profiler.Begin("UNIQUE_LABEL_NAME") ... Profiler.End() around portions of your code
+			-- to break your function into labels that are viewable under the results
+			-- histogram graph to see what parts of your function take the most time.
+
+
+			Profiler.Begin("Create Event");
+			local e = Instance.new("BindableEvent");
+			Profiler.End();
+
+			local v = table.create(a)
+			
+			Profiler.Begin("Connect to Event "..a.." Times");
+			for i=1,a,1 do
+				v[i]=e.Event:Connect(function()
+					return;
+				end);
+			end;
+			Profiler.End();
+			
+			Profiler.Begin("Fire Event");
+			e:Fire();
+			Profiler.End();
+			
+			Profiler.Begin("Disconnect "..a.." Connections");
+			for i=1,a,1 do
+				v[i]:Disconnect();
+			end;
+			Profiler.End();
+			
+		end;
+
+		["0ES"] = function(Profiler, a)
 
 			Profiler.Begin("Create Event");
 			local e = eventTest.makeEvent("Benchmark");
@@ -55,29 +88,13 @@ return {
 				v[i]:Disconnect();
 			end;
 			Profiler.End();
-			
-			Profiler.Begin("Reconnect "..a.." Connections");
-			for i=1,a,1 do
-				v[i]:Reconnect();
-			end;
-			Profiler.End();
 
-			Profiler.Begin("Loop over connections");
-			for _,o in pairs(e:GetConnections()) do end;
-			Profiler.End();
-
-			Profiler.Begin("Change Callbacks");
-			for _,o in pairs(e:GetConnections()) do
-				o:SetCb(function()	end)	
-			end;
-			Profiler.End();
-			
 		end;
---------------------------------------------------------------------------
-		["Custom Events Untyped"] = function(Profiler, a)
+		
+		["KIIS"] = function(Profiler, a)
 
 			Profiler.Begin("Create Event");
-			local e = eventTestUntyped.makeEvent("Benchmark");
+			local e = KIIS.new();
 			Profiler.End();
 
 			local v = table.create(a)
@@ -91,7 +108,7 @@ return {
 			Profiler.End();
 
 			Profiler.Begin("Fire Event");
-			e();
+			(e.FireSync or e.Fire)(e);
 			Profiler.End();
 
 			Profiler.Begin("Disconnect "..a.." Connections");
@@ -99,29 +116,17 @@ return {
 				v[i]:Disconnect();
 			end;
 			Profiler.End();
-
-			Profiler.Begin("Reconnect "..a.." Connections");
-			for i=1,a,1 do
-				v[i]:Reconnect();
-			end;
-			Profiler.End();
-
-			Profiler.Begin("Loop over connections");
-			for _,o in pairs(e:GetConnections()) do end;
-			Profiler.End();
-
-			Profiler.Begin("Change Callbacks");
-			for _,o in pairs(e:GetConnections()) do
-				o:SetCb(function()	end)	
-			end;
+			
+			Profiler.Begin("Garbage Collect");
+			e:GarbageCollect();
 			Profiler.End();
 
 		end;
---------------------------------------------------------------------------
-		["Custom Events Unsafe"] = function(Profiler, a)
+		
+		["KIIS Locked"] = function(Profiler, a)
 
 			Profiler.Begin("Create Event");
-			local e = eventTestUnsafe.makeEvent("Benchmark");
+			local e = KIIS.newLocked();
 			Profiler.End();
 
 			local v = table.create(a)
@@ -135,7 +140,7 @@ return {
 			Profiler.End();
 
 			Profiler.Begin("Fire Event");
-			e();
+			e:Fire();
 			Profiler.End();
 
 			Profiler.Begin("Disconnect "..a.." Connections");
@@ -144,20 +149,8 @@ return {
 			end;
 			Profiler.End();
 
-			Profiler.Begin("Reconnect "..a.." Connections");
-			for i=1,a,1 do
-				v[i]:Reconnect();
-			end;
-			Profiler.End();
-
-			Profiler.Begin("Loop over connections");
-			for _,o in pairs(e:GetConnections()) do end;
-			Profiler.End();
-
-			Profiler.Begin("Change Callbacks");
-			for _,o in pairs(e:GetConnections()) do
-				o:SetCb(function()	end)	
-			end;
+			Profiler.Begin("Garbage Collect");
+			e:GarbageCollect();
 			Profiler.End();
 			
 		end;
