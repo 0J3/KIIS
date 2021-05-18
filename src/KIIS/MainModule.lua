@@ -12,7 +12,9 @@ end;
 local KIIS = {};
 
 KIIS.new = function()
-	local KIISBindable = {};
+	local KIISBindable = {
+		Destroyed = false
+	};
 	local Connections={};
 	KIISBindable.Event={};
 	function KIISBindable:Connect(cb)
@@ -67,6 +69,7 @@ KIIS.new = function()
 		KIISBindable.Connect=KIISBindable.Fire;
 		KIISBindable.Disconnect=KIISBindable.Fire;
 		KIISBindable.GarbageCollect=function()end; -- dont blame ya for trying to garbage collect a destroyed object just incase, but it doesn't do anything.
+		KIISBindable.Destroyed=true;
 	end;
 	return KIISBindable;
 end;
