@@ -9,7 +9,7 @@ local QuickRemove = function(Tab, Index)
 	Tab[Size] = nil;
 end;
 
-local KIIS = {}
+local KIIS = {};
 
 KIIS.new = function()
 	local KIISBindable = {};
@@ -22,7 +22,7 @@ KIIS.new = function()
 			connection.Disconnect = function()end;
 			connection.disconnect = function()end;
 			connection.CB = function()end;
-		end
+		end;
 		connection = {
 			Disabled=false;
 			Disconnect=Disconnect;
@@ -55,6 +55,18 @@ KIIS.new = function()
 				c(table.unpack(b));
 			end));
 		end;
+	end;
+	function KIISBindable:Destroy()
+		for i in pairs(Connections) do
+			QuickRemove(Connections,i);
+		end;
+		function KIISBindable.Fire()
+			error("This Event was destroyed.");
+		end;
+		KIISBindable.FireAsync=KIISBindable.Fire;
+		KIISBindable.Connect=KIISBindable.Fire;
+		KIISBindable.Disconnect=KIISBindable.Fire;
+		KIISBindable.GarbageCollect=function()end; -- dont blame ya for trying to garbage collect a destroyed object just incase, but it doesn't do anything.
 	end;
 	return KIISBindable;
 end;
