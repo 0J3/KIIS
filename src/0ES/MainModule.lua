@@ -62,10 +62,10 @@ export type Connection = {
 	ClassName: string
 }
 
-local isEvent = function(v:any)
+local isEvent:(any)->boolean = function(v:any)
 	return typeof(v)=="table" and v.ClassName=="Event"
 end
-local isConnection = function(v:any)
+local isConnection:(any)->boolean = function(v:any)
 	return typeof(v)=="table" and v.ClassName=="Connection"
 end
 
@@ -181,7 +181,8 @@ local createEvent: (string)->Bindable = function(t:string)
 		end;
 		calls=calls+1;
 	end;
-	function internalEvent:FireSync(...) -- Sync version of Fire()
+	internalEvent.FireSync=internalEvent.Fire;
+	function internalEvent:FireAsync(...) -- Sync version of Fire()
 		lastCallAt=os.time();
 		for _,c in pairs(connections) do
 			if c then

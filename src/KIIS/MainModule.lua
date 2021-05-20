@@ -50,7 +50,8 @@ KIIS.new = function()
 			o.CB(...);
 		end;
 	end;
-	function KIISBindable:FireAsync(...)
+	KIISBindable.FireAsync=KIISBindable.Fire;
+	function KIISBindable:FireSync(...)
 		local b = table.pack(...)
 		for _,c in pairs(Connections) do
 			coroutine.resume(coroutine.create(function()
