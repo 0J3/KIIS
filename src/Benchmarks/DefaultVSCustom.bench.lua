@@ -14,9 +14,9 @@ https://devforum.roblox.com/t/benchmarker-plugin-compare-function-speeds-with-gr
 
 --------------------------------------------------------------------]]
 
-local eventTest = require(6822278371);
+local eventTest = require(game:GetService("ReplicatedFirst"):FindFirstChild("0ES")) or require(6822278371);
 
-local KIIS = require(6822873135);
+local KIIS = require(game:GetService("ReplicatedFirst"):FindFirstChild("KIIS")) or require(6822873135);
 
 return {
 
@@ -108,7 +108,7 @@ return {
 			Profiler.End();
 
 			Profiler.Begin("Fire Event");
-			(e.FireSync or e.Fire)(e);
+			e:Fire(e);
 			Profiler.End();
 
 			Profiler.Begin("Disconnect "..a.." Connections");
