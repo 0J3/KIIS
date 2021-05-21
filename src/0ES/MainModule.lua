@@ -171,6 +171,16 @@ local createEvent: (string)->Bindable = function(t:string)
 
 	function internalEvent:Fire(...)
 		lastCallAt=os.time();
+		for _,c in pairs(connections) do
+			if c then
+				c.Callback(...);
+			end
+		end;
+		calls=calls+1;
+		return bindable;
+	end;
+	function internalEvent:FireSync(...)
+		lastCallAt=os.time();
 		local b = table.pack(...)
 		for _,c in pairs(connections) do
 			if (c) then
@@ -181,17 +191,7 @@ local createEvent: (string)->Bindable = function(t:string)
 		end;
 		calls=calls+1;
 	end;
-	internalEvent.FireSync=internalEvent.Fire;
-	function internalEvent:FireAsync(...) -- Sync version of Fire()
-		lastCallAt=os.time();
-		for _,c in pairs(connections) do
-			if c then
-				c.Callback(...);
-			end
-		end;
-		calls=calls+1;
-		return bindable;
-	end;
+	internalEvent.FireAsync=internalEvent.Fire;
 
 	local metatable = {
 		__call = function(t,...)

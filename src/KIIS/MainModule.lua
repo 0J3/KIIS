@@ -52,12 +52,14 @@ KIIS.new = function()
 	end;
 	KIISBindable.FireAsync=KIISBindable.Fire;
 	function KIISBindable:FireSync(...)
-		local b = table.pack(...)
-		for _,c in pairs(Connections) do
-			coroutine.resume(coroutine.create(function()
-				c(table.unpack(b));
-			end));
-		end;
+		local b = table.pack(...);
+		coroutine.resume(coroutine.create(function()
+			for _,c in pairs(Connections) do
+				coroutine.resume(coroutine.create(function()
+					c(table.unpack(b));
+				end));
+			end;
+		end));
 	end;
 	function KIISBindable:Destroy()
 		for i in pairs(Connections) do
