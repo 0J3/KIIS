@@ -1,5 +1,6 @@
 --!nocheck
 -- KIIS: Keep It Insanely Simple, A lightweight even system by 0J3 that just works.
+-- @version 1.0.3
 
 local table = table;
 

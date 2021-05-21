@@ -1,6 +1,7 @@
 --!nonstrict
 -- 0J3's Event System
 -- @author 0J3_3
+-- @version 1.0.3
 -- Example:
 --[[
 local a = require(eventSystem).makeEvent("a");
