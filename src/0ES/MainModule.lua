@@ -182,14 +182,16 @@ local createEvent: (string)->Bindable = function(t:string)
 	function internalEvent:FireSync(...)
 		lastCallAt=os.time();
 		local b = table.pack(...)
-		for _,c in pairs(connections) do
-			if (c) then
-				coroutine.resume(coroutine.create(function()
-					c.Callback(table.unpack(b));
-				end));
-			end
-		end;
-		calls=calls+1;
+		coroutine.resume(coroutine.create(function()
+			for _,c in pairs(connections) do
+				if (c) then
+					coroutine.resume(coroutine.create(function()
+						c.Callback(table.unpack(b));
+					end));
+				end
+			end;
+			calls=calls+1;
+		end))
 	end;
 	internalEvent.FireAsync=internalEvent.Fire;
 
